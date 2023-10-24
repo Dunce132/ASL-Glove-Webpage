@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ASL Glove</title>
+        <style>
+
+        div {
+
+        background-color: #ffD700;
+
+        width: 300px;
+
+        border: 15px solid rgb(47, 0, 255);
+
+        padding: 50px;
+
+        margin: 20px;
+
+        }
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <h2>ASL Glove Translated Text</h2>
+
+        <div>
+        <textarea id="text"></textarea>
+        </div>
+        <button id="speak-button">Speak</button>
+
+        <script>
+            // Get the text area and speak button elements
+            let textArea = document.getElementById("text");
+            let speakButton = document.getElementById("speak-button");
+
+            // Add an event listener to the speak button
+            speakButton.addEventListener("click", function() {
+            // Get the text from the text area
+            let text = textArea.value;
+
+            // Create a new SpeechSynthesisUtterance object
+            let utterance = new SpeechSynthesisUtterance();
+
+            // Set the text and voice of the utterance
+            utterance.text = text;
+            utterance.voice = window.speechSynthesis.getVoices()[0];
+
+            // Speak the utterance
+            window.speechSynthesis.speak(utterance);
+            });
+        </script>
+
+        <p>Spoken text will go here</p>
+            <p id="action" style="color: grey;font-weight: 800; padding: 0; padding-left: 2rem;"></p>
+            <button onclick="runSpeechRecog()" style="border: transparent;padding: 0 0.5rem;">
+               Speech
+            </button>
+         
+         <script>
+            runSpeechRecog = () => {
+               document.getElementById("output").innerHTML = "Loading text...";
+               var output = document.getElementById('output');
+               var action = document.getElementById('action');
+               let recognization = new webkitSpeechRecognition();
+               recognization.onstart = () => {
+                  action.innerHTML = "Listening...";
+               }
+               recognization.onresult = (e) => {
+                  var transcript = e.results[0][0].transcript;
+                  output.innerHTML = transcript;
+                  output.classList.remove("hide")
+                  action.innerHTML = "";
+               }
+               recognization.start();
+            }
+         </script>
+        <div id="output" class="hide"></div>
+        
+
+    </body>
+
+</html>
